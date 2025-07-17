@@ -1,0 +1,611 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        DareSwap - Exchange Fun Dares!
+        {% endblock %}
+    </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            padding-top: 80px; /* Account for fixed navbar */
+        }
+        
+        .hero-section {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fd79a8);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            color: white;
+            padding: 4rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        footer {
+            background: rgba(0,0,0,0.8);
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(183, 156, 237, 0.2);
+            color: white;
+        }
+        
+        .dare-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .dare-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .dare-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        }
+        
+        .dare-difficulty {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .difficulty-easy { background: #2ecc71; color: white; }
+        .difficulty-medium { background: #f39c12; color: white; }
+        .difficulty-hard { background: #e74c3c; color: white; }
+        
+        .btn-primary-custom {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            padding: 0.7rem 2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success-custom {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-success-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+        }
+        
+        .floating-icon {
+            position: absolute;
+            animation: float 3s ease-in-out infinite;
+            font-size: 2rem;
+            opacity: 0.1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .stats-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .category-badge {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .pulse-button {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+        }
+
+        /* Fixed and Improved Navbar Styles */
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            border-bottom: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1) 1;
+            transition: all 0.3s ease;
+            padding: 0.8rem 0;
+            min-height: 70px;
+        }
+        
+        .navbar-custom.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.15);
+        }
+        
+        .navbar-brand-custom {
+            font-weight: bold;
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .navbar-brand-custom:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+        
+        .navbar-brand-custom img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .nav-link-custom {
+            color: #333 !important;
+            font-weight: 600;
+            position: relative;
+            padding: 0.5rem 1rem !important;
+            margin: 0 0.2rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .nav-link-custom i {
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .nav-link-custom::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        .nav-link-custom:hover::before {
+            width: 80%;
+        }
+        
+        .nav-link-custom:hover {
+            color: #667eea !important;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link-custom.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .nav-link-custom.active::before {
+            display: none;
+        }
+        
+        .navbar-toggler-custom {
+            border: none;
+            padding: 0.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-toggler-custom:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .navbar-toggler-custom .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+        
+        .notification-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            transform: scale(1.1);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounce 2s infinite;
+            font-weight: bold;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-2px); }
+        }
+        
+        .btn-nav-action {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+        
+        .btn-nav-action i {
+            margin-right: 0.5rem;
+        }
+        
+        .btn-nav-action:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+            color: white;
+        }
+        
+        /* Login Button Styles */
+        .btn-login {
+            background: linear-gradient(45deg, #fd79a8, #ff6b6b);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(253, 121, 168, 0.3);
+        }
+        
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .btn-login:hover::before {
+            left: 100%;
+        }
+        
+        .btn-login i {
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .btn-login:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(253, 121, 168, 0.5);
+            color: white;
+            background: linear-gradient(45deg, #ff6b6b, #fd79a8);
+        }
+        
+        .btn-login:active {
+            transform: scale(0.98);
+        }
+        
+        .dropdown-toggle-custom {
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+        
+        .dropdown-toggle-custom:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            transform: scale(1.1);
+        }
+        
+        .dropdown-toggle-custom:focus {
+            box-shadow: none;
+        }
+        
+        .dropdown-menu-custom {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            margin-top: 0.5rem;
+        }
+        
+        .dropdown-item-custom {
+            padding: 0.7rem 1.2rem;
+            color: #333;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .dropdown-item-custom i {
+            margin-right: 0.7rem;
+            width: 16px;
+            text-align: center;
+        }
+        
+        .dropdown-item-custom:hover {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 991.98px) {
+            .navbar-actions {
+                flex-direction: column;
+                gap: 0.7rem;
+                margin-top: 1rem;
+                width: 100%;
+            }
+            
+            .btn-nav-action, .btn-login {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .notification-btn, .dropdown-toggle-custom {
+                align-self: flex-start;
+            }
+            
+            body {
+                padding-top: 70px;
+            }
+        }
+    </style>
+    {% block style %}
+    {% endblock %}
+</head>
+<body>
+    <!-- Fixed and Improved Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand navbar-brand-custom" href="/">
+               <img src="{% static 'img/DareSwap.png' %}" alt="DareSwap Logo" style="width: 55px; height: 55px; border-radius: 50%;">
+                DareSwap
+            </a>
+            
+            <!-- Mobile toggle button -->
+            <button class="navbar-toggler navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Collapsible content -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Left nav items -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom active" href="/">
+                            <i class="fas fa-home"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="{% url 'create_dare' %}">
+                            <i class="fas fa-plus"></i>Create Dare
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="{% url 'current_dares' %}">
+                            <i class="fas fa-bolt"></i>Currently Active
+                        </a>
+                        
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="#leaderboard">
+                            <i class="fas fa-trophy"></i>Leaderboard
+                        </a>
+                    </li>
+                    
+                    <!-- <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="{% url 'dashboard' %}">
+                            <i class="fas fa-list"></i>Manage Dares
+                        </a>
+                        
+                    </li> -->
+                </ul>
+                
+                <!-- Right nav actions -->
+                <div class="navbar-actions">
+                     <!-- Notifications -->
+                    <button class="notification-btn" onclick="showNotifications()" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                    
+                    <!-- Login Button -->
+                    <button class="btn-login" title="Register" onclick="window.location.href='{% url 'register' %}'">
+                    <i class="fas fa-sign-in-alt"></i> Register
+                    </button>
+
+
+
+               
+                    <div class="dropdown">
+                        <button class="dropdown-toggle-custom" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="User Menu">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
+                            <li><a class="dropdown-item dropdown-item-custom" href="#profile">
+                                <i class="fas fa-user"></i>Profile
+                            </a></li>
+                            <li><a class="dropdown-item dropdown-item-custom" href="#settings">
+                                <i class="fas fa-cog"></i>Settings
+                            </a></li>
+                            <li><a class="dropdown-item dropdown-item-custom" href="#my-dares">
+                                <i class="fas fa-list"></i>My Dares
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item dropdown-item-custom" href="#logout">
+                                <i class="fas fa-sign-out-alt"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Floating Background Icons -->
+    <div class="floating-icon" style="top: 10%; left: 10%;"><i class="fas fa-tasks"></i></div>
+    <div class="floating-icon" style="top: 20%; right: 15%;"><i class="fas fa-edit"></i></div>
+    <div class="floating-icon" style="bottom: 20%; left: 20%;"><i class="fas fa-search"></i></div>
+    <div class="floating-icon" style="bottom: 10%; right: 10%;"><i class="fas fa-star"></i></div>
+    <div class="floating-icon" style="bottom: 10%; right: 10%;"><i class="fas fa-smile"></i></div>
+
+    <!-- Main Content Area -->
+    <main>
+        {% block body %}
+        <div class="hero-section">
+            <div class="container text-center">
+                <h1 class="display-4 mb-4">Welcome to DareSwap!</h1>
+                <p class="lead">Your beautiful login button has been added!</p>
+                <p class="lead">Click the pink gradient login button in the navbar to get started!</p>
+            </div>
+        </div>
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Anshika Saraswat. Built with passion and dedication to learning.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar-custom');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Placeholder functions
+        function showNotifications() {
+            alert('Notifications feature coming soon!');
+        }
+        
+        function showCreateDareModal() {
+            alert('Create Dare modal coming soon!');
+        }
+        
+       
+    </script>
+</body>
+</html>

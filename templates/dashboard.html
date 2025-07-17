@@ -1,0 +1,747 @@
+{% extends 'base.html' %}
+{% block body %}
+    <style>
+        
+        
+        .header-section {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fd79a8);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            color: white;
+            padding: 2rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+       
+        
+        .dare-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .dare-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .dare-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        }
+        
+        .dare-difficulty {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .difficulty-easy { background: #2ecc71; color: white; }
+        .difficulty-medium { background: #f39c12; color: white; }
+        .difficulty-hard { background: #e74c3c; color: white; }
+        
+        .btn-primary-custom {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            padding: 0.7rem 2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .btn-success-custom {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .btn-success-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+            color: white;
+        }
+        
+        .btn-warning-custom {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            border: none;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .btn-warning-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+            color: white;
+        }
+        
+        .btn-danger-custom {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border: none;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .btn-danger-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+            color: white;
+        }
+        
+        .search-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .search-input {
+            border-radius: 20px;
+            border: 2px solid #e0e0e0;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .category-badge {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .stats-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        
+       
+        
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+        }
+        
+        .form-control-custom {
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            padding: 0.8rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control-custom:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .no-dares-message {
+            text-align: center;
+            color: white;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        @media (max-width: 768px) {
+            .action-buttons {
+                justify-content: center;
+            }
+            
+            .dare-card {
+                margin-bottom: 1rem;
+            }
+        }
+       
+       
+    
+
+        
+      
+        
+    
+      
+    </style>
+</head>
+<body>
+    
+    
+    <!-- Header Section -->
+    <section class="header-section">
+        <br><br><br>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-tasks text-warning"></i> Manage Your Dares
+                    </h1>
+                    <p class="lead mb-0">Create, edit, and organize all your amazing dares in one place!</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <button class="btn btn-success-custom btn-lg" onclick="showCreateModal()">
+                        <i class="fas fa-plus"></i> Create New Dare
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <!-- Stats Container -->
+        <div class="stats-container">
+            <div class="row text-center">
+                <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+                    <div>
+                        <i class="fas fa-list fa-2x mb-2 text-warning"></i>
+                        <h4 class="fw-bold" id="totalDares">0</h4>
+                        <p class="mb-0">Total Dares</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+                    <div>
+                        <i class="fas fa-fire fa-2x mb-2 text-danger"></i>
+                        <h4 class="fw-bold" id="hardDares">0</h4>
+                        <p class="mb-0">Hard Dares</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+                    <div>
+                        <i class="fas fa-star fa-2x mb-2 text-info"></i>
+                        <h4 class="fw-bold" id="popularDares">0</h4>
+                        <p class="mb-0">Popular Dares</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div>
+                        <i class="fas fa-tags fa-2x mb-2 text-success"></i>
+                        <h4 class="fw-bold" id="categories">0</h4>
+                        <p class="mb-0">Categories</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="search-container">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text" style="border-radius: 20px 0 0 20px;">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" class="form-control search-input" id="searchInput" placeholder="Search dares by title, description, or category..." style="border-radius: 0 20px 20px 0;">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control search-input" id="difficultyFilter">
+                        <option value="">All Difficulties</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control search-input" id="categoryFilter">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dares Container -->
+        <div id="daresContainer">
+            <!-- Dares will be populated here -->
+        </div>
+
+        <!-- No Dares Message -->
+        <div id="noDaresMessage" class="no-dares-message" style="display: none;">
+            <i class="fas fa-inbox fa-5x mb-3 opacity-50"></i>
+            <h3>No Dares Found</h3>
+            <p>You haven't created any dares yet, or no dares match your search criteria.</p>
+            <button class="btn btn-success-custom btn-lg mt-3" onclick="showCreateModal()">
+                <i class="fas fa-plus"></i> Create Your First Dare
+            </button>
+        </div>
+    </div>
+
+    <!-- Create/Edit Dare Modal -->
+    <div class="modal fade" id="dareModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient" style="background: linear-gradient(45deg, #4ecdc4, #44a08d); border-radius: 20px 20px 0 0;">
+                    <h5 class="modal-title text-white fw-bold" id="modalTitle">
+                        <i class="fas fa-plus"></i> Create New Dare
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="dareForm">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Dare Title *</label>
+                                <input type="text" class="form-control form-control-custom" id="dareTitle" placeholder="Enter a catchy title..." required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Description *</label>
+                                <textarea class="form-control form-control-custom" id="dareDescription" rows="4" placeholder="Describe your dare in detail..." required></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Difficulty *</label>
+                                <select class="form-control form-control-custom" id="dareDifficulty" required>
+                                    <option value="">Select Difficulty</option>
+                                    <option value="easy">Easy</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="hard">Hard</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Category *</label>
+                                <input type="text" class="form-control form-control-custom" id="dareCategory" placeholder="e.g., Funny, Social, Creative..." required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Estimated Time</label>
+                                <input type="text" class="form-control form-control-custom" id="dareTime" placeholder="e.g., 5 minutes, 1 hour...">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Location</label>
+                                <input type="text" class="form-control form-control-custom" id="dareLocation" placeholder="e.g., Anywhere, Public place...">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Tags (comma-separated)</label>
+                                <input type="text" class="form-control form-control-custom" id="dareTags" placeholder="e.g., fun, challenge, social, creative...">
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-success-custom btn-lg me-2">
+                                <i class="fas fa-save"></i> Save Dare
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white" style="border-radius: 20px 20px 0 0;">
+                    <h5 class="modal-title fw-bold">
+                        <i class="fas fa-exclamation-triangle"></i> Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <i class="fas fa-trash-alt fa-4x text-danger mb-3"></i>
+                    <h4>Are you sure?</h4>
+                    <p class="text-muted mb-4">This action cannot be undone. The dare will be permanently deleted.</p>
+                    <div>
+                        <button type="button" class="btn btn-danger-custom me-2" id="confirmDelete">
+                            <i class="fas fa-trash"></i> Yes, Delete
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dare data management
+        let dares = [];
+        let currentEditId = null;
+        let deleteId = null;
+        let filteredDares = [];
+
+        // Initialize the page
+        function initializePage() {
+            loadDares();
+            setupEventListeners();
+            renderDares();
+            updateStats();
+        }
+
+        // Load dares from memory (in a real app, this would be from a database)
+        function loadDares() {
+            const savedDares = localStorage.getItem('userDares');
+            if (savedDares) {
+                dares = JSON.parse(savedDares);
+            } else {
+                // Sample initial data
+                dares = [
+                    {
+                        id: 1,
+                        title: "Sing in Public",
+                        description: "Sing your favorite song loudly in a public place for 1 minute! Make sure to put your heart into it and don't worry about what others think.",
+                        difficulty: "medium",
+                        category: "Social",
+                        time: "5 minutes",
+                        location: "Public place",
+                        tags: ["fun", "social", "music", "confidence"],
+                        likes: 45,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 2,
+                        title: "Random Act of Kindness",
+                        description: "Buy coffee for the person behind you in line and make their day! Leave a positive note with it.",
+                        difficulty: "easy",
+                        category: "Kindness",
+                        time: "10 minutes",
+                        location: "Coffee shop",
+                        tags: ["kindness", "social", "positive", "giving"],
+                        likes: 78,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 3,
+                        title: "Backwards Day Challenge",
+                        description: "Spend an entire day doing everything backwards - walk backwards, wear clothes backwards, eat dessert first! Document your experience.",
+                        difficulty: "hard",
+                        category: "Quirky",
+                        time: "Full day",
+                        location: "Anywhere",
+                        tags: ["quirky", "challenge", "creative", "unique"],
+                        likes: 23,
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                saveDares();
+            }
+            filteredDares = [...dares];
+        }
+
+        // Save dares to memory
+        function saveDares() {
+            localStorage.setItem('userDares', JSON.stringify(dares));
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', filterDares);
+            document.getElementById('difficultyFilter').addEventListener('change', filterDares);
+            document.getElementById('categoryFilter').addEventListener('change', filterDares);
+
+            // Form submission
+            document.getElementById('dareForm').addEventListener('submit', handleFormSubmit);
+
+            // Delete confirmation
+            document.getElementById('confirmDelete').addEventListener('click', handleDelete);
+        }
+
+        // Filter dares based on search and filters
+        function filterDares() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const difficultyFilter = document.getElementById('difficultyFilter').value;
+            const categoryFilter = document.getElementById('categoryFilter').value;
+
+            filteredDares = dares.filter(dare => {
+                const matchesSearch = dare.title.toLowerCase().includes(searchTerm) ||
+                                    dare.description.toLowerCase().includes(searchTerm) ||
+                                    dare.category.toLowerCase().includes(searchTerm) ||
+                                    dare.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+
+                const matchesDifficulty = !difficultyFilter || dare.difficulty === difficultyFilter;
+                const matchesCategory = !categoryFilter || dare.category === categoryFilter;
+
+                return matchesSearch && matchesDifficulty && matchesCategory;
+            });
+
+            renderDares();
+        }
+
+        // Render dares to the page
+        function renderDares() {
+            const container = document.getElementById('daresContainer');
+            const noDaresMessage = document.getElementById('noDaresMessage');
+
+            if (filteredDares.length === 0) {
+                container.innerHTML = '';
+                noDaresMessage.style.display = 'block';
+                return;
+            }
+
+            noDaresMessage.style.display = 'none';
+            
+            container.innerHTML = filteredDares.map(dare => `
+                <div class="dare-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <span class="dare-difficulty difficulty-${dare.difficulty}">${dare.difficulty}</span>
+                                <span class="category-badge">${dare.category}</span>
+                            </div>
+                            <div class="text-muted">
+                                <i class="fas fa-heart text-danger"></i> ${dare.likes || 0}
+                            </div>
+                        </div>
+                        
+                        <h5 class="fw-bold text-primary mb-3">${dare.title}</h5>
+                        <p class="text-muted mb-3">${dare.description}</p>
+                        
+                        <div class="row g-2 mb-3">
+                            ${dare.time ? `<div class="col-sm-6"><small class="text-muted"><i class="fas fa-clock"></i> ${dare.time}</small></div>` : ''}
+                            ${dare.location ? `<div class="col-sm-6"><small class="text-muted"><i class="fas fa-map-marker-alt"></i> ${dare.location}</small></div>` : ''}
+                        </div>
+                        
+                        ${dare.tags && dare.tags.length > 0 ? `
+                            <div class="mb-3">
+                                ${dare.tags.map(tag => `<span class="badge bg-secondary me-1 mb-1">#${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar"></i> ${new Date(dare.createdAt).toLocaleDateString()}
+                            </small>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-primary-custom" onclick="viewDare(${dare.id})" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning-custom" onclick="editDare(${dare.id})" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger-custom" onclick="confirmDeleteDare(${dare.id})" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            updateCategoryFilter();
+        }
+
+        // Update category filter options
+        function updateCategoryFilter() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const categories = [...new Set(dares.map(dare => dare.category))];
+            
+            // Keep the "All Categories" option and add unique categories
+            const currentValue = categoryFilter.value;
+            categoryFilter.innerHTML = '<option value="">All Categories</option>' +
+                categories.map(category => `<option value="${category}">${category}</option>`).join('');
+            categoryFilter.value = currentValue;
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('totalDares').textContent = dares.length;
+            document.getElementById('hardDares').textContent = dares.filter(d => d.difficulty === 'hard').length;
+            document.getElementById('popularDares').textContent = dares.filter(d => (d.likes || 0) > 20).length;
+            document.getElementById('categories').textContent = new Set(dares.map(d => d.category)).size;
+        }
+
+        // Show create modal
+        function showCreateModal() {
+            currentEditId = null;
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus"></i> Create New Dare';
+            document.getElementById('dareForm').reset();
+            new bootstrap.Modal(document.getElementById('dareModal')).show();
+        }
+
+        // View dare details
+        function viewDare(id) {
+            const dare = dares.find(d => d.id === id);
+            if (!dare) return;
+
+            const details = `
+Title: ${dare.title}
+
+Description: ${dare.description}
+
+Difficulty: ${dare.difficulty}
+Category: ${dare.category}
+${dare.time ? `Time Required: ${dare.time}` : ''}
+${dare.location ? `Location: ${dare.location}` : ''}
+${dare.tags && dare.tags.length > 0 ? `Tags: ${dare.tags.join(', ')}` : ''}
+
+Likes: ${dare.likes || 0}
+Created: ${new Date(dare.createdAt).toLocaleDateString()}
+            `;
+
+            alert(details);
+        }
+
+        // Edit dare
+        function editDare(id) {
+            const dare = dares.find(d => d.id === id);
+            if (!dare) return;
+
+            currentEditId = id;
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Dare';
+            
+            // Populate form fields
+            document.getElementById('dareTitle').value = dare.title;
+            document.getElementById('dareDescription').value = dare.description;
+            document.getElementById('dareDifficulty').value = dare.difficulty;
+            document.getElementById('dareCategory').value = dare.category;
+            document.getElementById('dareTime').value = dare.time || '';
+            document.getElementById('dareLocation').value = dare.location || '';
+            document.getElementById('dareTags').value = dare.tags ? dare.tags.join(', ') : '';
+
+            new bootstrap.Modal(document.getElementById('dareModal')).show();
+        }
+
+        // Confirm delete dare
+        function confirmDeleteDare(id) {
+            deleteId = id;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+
+        // Handle form submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const formData = {
+                title: document.getElementById('dareTitle').value.trim(),
+                description: document.getElementById('dareDescription').value.trim(),
+                difficulty: document.getElementById('dareDifficulty').value,
+                category: document.getElementById('dareCategory').value.trim(),
+                time: document.getElementById('dareTime').value.trim(),
+                location: document.getElementById('dareLocation').value.trim(),
+                tags: document.getElementById('dareTags').value.trim().split(',').map(tag => tag.trim()).filter(tag => tag)
+            };
+
+            if (currentEditId) {
+                // Edit existing dare
+                const dareIndex = dares.findIndex(d => d.id === currentEditId);
+                if (dareIndex !== -1) {
+                    dares[dareIndex] = {
+                        ...dares[dareIndex],
+                        ...formData,
+                        updatedAt: new Date().toISOString()
+                    };
+                }
+            } else {
+                // Create new dare
+                const newDare = {
+                    id: Date.now(),
+                    ...formData,
+                    likes: 0,
+                    createdAt: new Date().toISOString()
+                };
+                dares.unshift(newDare);
+            }
+
+            saveDares();
+            filterDares();
+            updateStats();
+            bootstrap.Modal.getInstance(document.getElementById('dareModal')).hide();
+            
+            // Show success message
+            showSuccessMessage(currentEditId ? 'Dare updated successfully!' : 'New dare created successfully!');
+        }
+
+        // Handle delete
+        function handleDelete() {
+            if (deleteId) {
+                dares = dares.filter(d => d.id !== deleteId);
+                saveDares();
+                filterDares();
+                updateStats();
+                bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+                showSuccessMessage('Dare deleted successfully!');
+                deleteId = null;
+            }
+        }
+
+        // Show success message
+        function showSuccessMessage(message) {
+            // Create a temporary toast-like notification
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed top-0 end-0 m-3 p-3 bg-success text-white rounded-3 shadow-lg';
+            toast.style.zIndex = '9999';
+            toast.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Animate in
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                toast.style.transition = 'transform 0.3s ease';
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize page when loaded
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+</html>
+{% endblock %}

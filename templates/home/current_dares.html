@@ -1,0 +1,562 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Currently Active Dares - DareSwap
+{% endblock %}
+
+{% block style %}
+<style>
+    .hero-section {
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fd79a8);
+        background-size: 400% 400%;
+        animation: gradientShift 8s ease infinite;
+        color: white;
+        padding: 4rem 0;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .btn-edit-custom {
+    background-color: #4ecdc4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 12px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    }
+
+    .btn-edit-custom:hover {
+    background-color: #38b6aa;
+    color: white;
+    }
+
+    
+
+    
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .dare-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+        border: none;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(10px);
+    }
+    
+    .dare-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    .dare-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+    }
+    
+    .dare-header {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        padding: 1.5rem;
+        margin: 0;
+        border-radius: 20px 20px 0 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .dare-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: shimmer 3s ease-in-out infinite;
+    }
+    
+    @keyframes shimmer {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(180deg); }
+    }
+    
+    .dare-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0 0 0.5rem 0;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .dare-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .dare-body {
+        padding: 2rem;
+    }
+    
+    .dare-description {
+        color: #333;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+    
+    .dare-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .detail-item {
+        background: rgba(102, 126, 234, 0.1);
+        padding: 1rem;
+        border-radius: 15px;
+        border-left: 4px solid #667eea;
+        transition: all 0.3s ease;
+    }
+    
+    .detail-item:hover {
+        background: rgba(102, 126, 234, 0.2);
+        transform: translateX(5px);
+    }
+    
+    .detail-label {
+        font-weight: bold;
+        color: #667eea;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .detail-label i {
+        margin-right: 0.5rem;
+    }
+    
+    .detail-value {
+        color: #333;
+        font-size: 1.1rem;
+    }
+    
+    .difficulty-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .difficulty-easy {
+        background: #27ae60;
+        color: white;
+    }
+    
+    .difficulty-medium {
+        background: #f39c12;
+        color: white;
+    }
+    
+    .difficulty-hard {
+        background: #e74c3c;
+        color: white;
+    }
+    
+    .category-badge {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+    
+    .stats-summary {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        color: white;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .stat-card {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.8;
+    }
+    
+    .search-filter-bar {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .search-input {
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .search-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .filter-select {
+        border: 2px solid #e9ecef;
+        border-radius: 25px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .no-dares {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: white;
+    }
+    
+    .no-dares i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+    
+    .no-dares h3 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+    
+    .no-dares p {
+        font-size: 1.1rem;
+        opacity: 0.8;
+        margin-bottom: 2rem;
+    }
+    
+    .btn-primary-custom {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border: none;
+        border-radius: 25px;
+        padding: 0.7rem 2rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-primary-custom:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    @media (max-width: 768px) {
+        .dare-details {
+            grid-template-columns: 1fr;
+        }
+        
+        .dare-meta {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .btn-danger {
+        background-color: #e73c3c;
+        border: none;
+        border-radius: 5px;
+        padding: 6px 12px;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+        }
+
+        .btn-danger:hover {
+        background-color: #c0392b;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-fire"></i> Currently Active Dares
+        </h1>
+        <p class="lead mb-4">Manage and track your saved dares</p>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container my-5">
+    <!-- Stats Summary -->
+    <div class="stats-summary">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ dares.count }}</div>
+                <div class="stat-label">Total Dares</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ dares.count }}</div>
+                <div class="stat-label">Active</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="search-filter-bar">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" class="form-control search-input" placeholder="Search dares..." id="searchInput">
+            </div>
+            <div class="col-md-3">
+                <select class="form-select filter-select" id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="fitness">Fitness</option>
+                    <option value="creativity">Creativity</option>
+                    <option value="social">Social</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="skill">Skill Building</option>
+                    <option value="funny">Funny</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select filter-select" id="difficultyFilter">
+                    <option value="">All Difficulties</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dare Cards -->
+    <div class="row" id="daresList">
+        {% if dares %}
+            {% for dare in dares %}
+            <div class="col-12 dare-item" data-category="{{ dare.Category|lower }}" data-difficulty="{{ dare.Difficulty|lower }}">
+                <div class="dare-card">
+                    <div class="dare-header">
+                        <div class="dare-title">{{ dare.DareTitle }}
+                            <small class="text-gray-500" style="font-size: 15px;">
+                                {% if dare.is_edited %}
+                                (edited)
+                                {% endif %}
+
+                            </small> 
+                        </div>
+                        <div class="dare-meta">
+                            <span class="difficulty-badge difficulty-{{ dare.Difficulty|lower }}">{{ dare.Difficulty }}</span>
+                            <span class="category-badge">
+                                <i class="fas fa-tag"></i> {{ dare.Category }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="dare-body">
+                        <div class="dare-description">
+                            {{ dare.Description }}
+                        </div>
+                        
+                        <div class="dare-details">
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    <i class="fas fa-user"></i> Creator
+                                </div>
+                                <div class="detail-value">{{ dare.Name }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    <i class="fas fa-envelope"></i> Email
+                                </div>
+                                <div class="detail-value">{{ dare.Email }}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">
+                                    <i class="fas fa-calendar-alt"></i> Deadline
+                                </div>
+                                <div class="detail-value">{{ dare.Deadline|date:"M d, Y" }}</div>
+                                
+                        </div>
+                    </div>
+                    <!-- 🌟 Delete Button -->
+                    <div class="text-end mt-3">
+                        <form action="{% url 'delete_dare' dare.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this dare?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
+                        </form>
+                        <!-----Edit Dare---->
+                        <div class="text-end mt-2">
+                        <a href="{%url 'edit_dare' dare.id %}" class="btn btn-edit-custom btn-sm">
+                        <i class="fas fa-edit"></i> Edit
+                        </a>
+                        </div>
+
+                        </form>
+</div>
+
+
+                </div>
+             </div>
+        </div>
+            
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="no-dares">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>No Dares Found</h3>
+                    <p>You haven't created any dares yet. Start your journey by creating your first dare!</p>
+                    <a href="{% url 'create_dare' %}" class="btn btn-primary-custom">
+                        <i class="fas fa-pencil"></i> Create Dare
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Search functionality
+document.getElementById('searchInput').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    const difficultyFilter = document.getElementById('difficultyFilter').value;
+    filterDares(searchTerm, categoryFilter, difficultyFilter);
+});
+
+// Category filter
+document.getElementById('categoryFilter').addEventListener('change', function() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const categoryFilter = this.value;
+    const difficultyFilter = document.getElementById('difficultyFilter').value;
+    filterDares(searchTerm, categoryFilter, difficultyFilter);
+});
+
+// Difficult filter
+document.getElementById('difficultyFilter').addEventListener('change', function() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    const difficultyFilter = this.value;
+    filterDares(searchTerm, categoryFilter, difficultyFilter);
+});
+
+function filterDares(searchTerm, categoryFilter, difficultyFilter) {
+    const dareItems = document.querySelectorAll('.dare-item');
+    let visibleCount = 0;
+    
+    dareItems.forEach(item => {
+        const title = item.querySelector('.dare-title').textContent.toLowerCase();
+        const description = item.querySelector('.dare-description').textContent.toLowerCase();
+        const category = item.getAttribute('data-category');
+        const difficulty = item.getAttribute('data-difficulty');
+        
+        const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+        const matchesCategory = !categoryFilter || category === categoryFilter;
+        const matchesDifficulty = !difficultyFilter || difficulty === difficultyFilter;
+        
+        if (matchesSearch && matchesCategory && matchesDifficulty) {
+            item.style.display = 'block';
+            visibleCount++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
+    // Show/hide no dares message
+    const noDares = document.querySelector('.no-dares');
+    if (visibleCount === 0 && dareItems.length > 0) {
+        if (!noDares) {
+            const noDaresDiv = document.createElement('div');
+            noDaresDiv.className = 'col-12';
+            noDaresDiv.innerHTML = `
+                <div class="no-dares">
+                    <i class="fas fa-search"></i>
+                    <h3>No Matching Dares Found</h3>
+                    <p>Try adjusting your search or filter criteria.</p>
+                </div>
+            `;
+            document.getElementById('daresList').appendChild(noDaresDiv);
+        }
+    } else if (noDares && visibleCount > 0) {
+        noDares.closest('.col-12').remove();
+    }
+} 
+</script>
+{% endblock %}
