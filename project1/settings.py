@@ -37,8 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     "home.apps.HomeConfig",
     "accounts.apps.AccountsConfig",
+    "dashboard.apps.DashboardConfig",
+    
 ]
 
 MIDDLEWARE = [
@@ -54,9 +57,9 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'project1.urls'
 
 TEMPLATES = [
-    {
+    {   'DIRS': [BASE_DIR / 'templates'],
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["templates"],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,10 +126,15 @@ STATICFILES_DIRS = [
 
 # ---Media Files---
 MEDIA_URL="/media/" #url to access file
-MEDIA_ROOT='media' #folder
+MEDIA_ROOT= BASE_DIR /'media' #folder
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+import os
+from dotenv import load_dotenv
+load_dotenv()

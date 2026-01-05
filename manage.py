@@ -20,3 +20,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+from django.contrib.auth.models import User
+from accounts.models import Student
+
+admin = User.objects.first()
+Student.objects.filter(user__isnull=True).update(user=admin)

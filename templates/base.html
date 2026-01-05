@@ -16,7 +16,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             font-family: 'Arial', sans-serif;
-            padding-top: 80px; /* Account for fixed navbar */
+            padding-top: 80px;
         }
         
         .hero-section {
@@ -151,7 +151,6 @@
             100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
         }
 
-        /* Fixed and Improved Navbar Styles */
         .navbar-custom {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -187,8 +186,8 @@
         }
         
         .navbar-brand-custom img {
-            width: 40px;
-            height: 40px;
+            width: 55px;
+            height: 55px;
             margin-right: 10px;
             border-radius: 50%;
             object-fit: cover;
@@ -268,79 +267,39 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
-        .notification-btn {
-            position: relative;
-            background: none;
-            border: none;
-            color: #333;
-            font-size: 1.2rem;
-            padding: 0.5rem;
+
+        /* Keep navbar items on a single line on large screens and prevent wrapping */
+        @media (min-width: 992px) {
+            .navbar-nav {
+                flex-wrap: nowrap;
+                gap: 0.4rem;
+            }
+            .nav-link-custom {
+                white-space: nowrap;
+            }
+        }
+
+        /* Allow horizontal scrolling if nav overflows on smaller widths */
+        .navbar-nav {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Place brand flush to the left with a small inset for visual breathing room */
+        .navbar-brand-custom {
+            margin-left: 0;
+            padding-left: 0.5rem;
+        }
+
+        .navbar-brand-custom img {
+            width: 48px;
+            height: 48px;
+            margin-right: 10px;
             border-radius: 50%;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
+            object-fit: cover;
         }
         
-        .notification-btn:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            transform: scale(1.1);
-        }
-        
-        .notification-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: #ff6b6b;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: bounce 2s infinite;
-            font-weight: bold;
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-5px); }
-            60% { transform: translateY(-2px); }
-        }
-        
-        .btn-nav-action {
-            background: linear-gradient(45deg, #4ecdc4, #44a08d);
-            border: none;
-            border-radius: 25px;
-            color: white;
-            padding: 0.5rem 1.2rem;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-        }
-        
-        .btn-nav-action i {
-            margin-right: 0.5rem;
-        }
-        
-        .btn-nav-action:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
-            color: white;
-        }
-        
-        /* Login Button Styles */
-        .btn-login {
-            background: linear-gradient(45deg, #fd79a8, #ff6b6b);
+        .btn-auth {
             border: none;
             border-radius: 25px;
             color: white;
@@ -349,42 +308,55 @@
             font-size: 0.9rem;
             transition: all 0.3s ease;
             white-space: nowrap;
-            display: flex;
+            display: inline-flex;
             align-items: center;
+            text-decoration: none;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(253, 121, 168, 0.3);
         }
         
-        .btn-login::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), transparent);
-            transition: all 0.5s ease;
-        }
-        
-        .btn-login:hover::before {
-            left: 100%;
-        }
-        
-        .btn-login i {
+        .btn-auth i {
             margin-right: 0.5rem;
             font-size: 1rem;
         }
         
-        .btn-login:hover {
+        .btn-auth:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(253, 121, 168, 0.5);
             color: white;
+        }
+        
+        .btn-auth:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-login {
+            background: linear-gradient(45deg, #fd79a8, #ff6b6b);
+            box-shadow: 0 4px 15px rgba(253, 121, 168, 0.3);
+        }
+        
+        .btn-login:hover {
+            box-shadow: 0 6px 20px rgba(253, 121, 168, 0.5);
             background: linear-gradient(45deg, #ff6b6b, #fd79a8);
         }
         
-        .btn-login:active {
-            transform: scale(0.98);
+        .btn-register {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+        
+        .btn-register:hover {
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.5);
+            background: linear-gradient(45deg, #44a08d, #4ecdc4);
+        }
+        
+        .btn-logout {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .btn-logout:hover {
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.5);
+            background: linear-gradient(45deg, #c0392b, #e74c3c);
         }
         
         .dropdown-toggle-custom {
@@ -441,7 +413,6 @@
             transform: translateX(5px);
         }
         
-        /* Mobile Responsive */
         @media (max-width: 991.98px) {
             .navbar-actions {
                 flex-direction: column;
@@ -450,12 +421,12 @@
                 width: 100%;
             }
             
-            .btn-nav-action, .btn-login {
+            .btn-auth {
                 width: 100%;
                 justify-content: center;
             }
             
-            .notification-btn, .dropdown-toggle-custom {
+            .dropdown-toggle-custom {
                 align-self: flex-start;
             }
             
@@ -468,23 +439,18 @@
     {% endblock %}
 </head>
 <body>
-    <!-- Fixed and Improved Navbar -->
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
-        <div class="container">
-            <!-- Brand -->
+        <div class="container-fluid px-0">
             <a class="navbar-brand navbar-brand-custom" href="/">
-               <img src="{% static 'img/DareSwap.png' %}" alt="DareSwap Logo" style="width: 55px; height: 55px; border-radius: 50%;">
+               <img src="{% static 'img/DareSwap.png' %}" alt="DareSwap Logo">
                 DareSwap
             </a>
             
-            <!-- Mobile toggle button -->
             <button class="navbar-toggler navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
-            <!-- Collapsible content -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Left nav items -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link nav-link-custom active" href="/">
@@ -496,97 +462,74 @@
                             <i class="fas fa-plus"></i>Create Dare
                         </a>
                     </li>
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link nav-link-custom" href="{% url 'current_dares' %}">
                             <i class="fas fa-bolt"></i>Currently Active
                         </a>
-                        
+                    </li>
+                    
+                   <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="{% url 'dashboard' %}">
+                            <i class="fas fa-list"></i>Dashboard
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="#leaderboard">
+                        <a class="nav-link nav-link-custom" href="{% url 'ask_ai' %}">
+                            <i class="fas fa-robot"></i>Ask AI
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="{% url 'leaderboard' %}">
                             <i class="fas fa-trophy"></i>Leaderboard
                         </a>
                     </li>
-                    
-                    <!-- <li class="nav-item">
-                        <a class="nav-link nav-link-custom" href="{% url 'dashboard' %}">
-                            <i class="fas fa-list"></i>Manage Dares
-                        </a>
-                        
-                    </li> -->
+                
                 </ul>
                 
-                <!-- Right nav actions -->
                 <div class="navbar-actions">
-                     <!-- Notifications -->
-                    <button class="notification-btn" onclick="showNotifications()" title="Notifications">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge"></span>
-                    </button>
-                    
-                    <!-- Login Button -->
-                    <button class="btn-login" title="Register" onclick="window.location.href='{% url 'register' %}'">
-                    <i class="fas fa-sign-in-alt"></i> Register
-                    </button>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="btn-auth btn-logout">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    {% else %}
+                        <a href="{% url 'register' %}" class="btn-auth btn-register">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                        <a href="{% url 'login' %}" class="btn-auth btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    {% endif %}
 
-
-
-               
-                    <div class="dropdown">
-                        <button class="dropdown-toggle-custom" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="User Menu">
-                            <i class="fas fa-user-circle"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                            <li><a class="dropdown-item dropdown-item-custom" href="#profile">
-                                <i class="fas fa-user"></i>Profile
-                            </a></li>
-                            <li><a class="dropdown-item dropdown-item-custom" href="#settings">
-                                <i class="fas fa-cog"></i>Settings
-                            </a></li>
-                            <li><a class="dropdown-item dropdown-item-custom" href="#my-dares">
-                                <i class="fas fa-list"></i>My Dares
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item dropdown-item-custom" href="#logout">
-                                <i class="fas fa-sign-out-alt"></i>Logout
-                            </a></li>
-                        </ul>
-                    </div>
+                 
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Floating Background Icons -->
     <div class="floating-icon" style="top: 10%; left: 10%;"><i class="fas fa-tasks"></i></div>
     <div class="floating-icon" style="top: 20%; right: 15%;"><i class="fas fa-edit"></i></div>
     <div class="floating-icon" style="bottom: 20%; left: 20%;"><i class="fas fa-search"></i></div>
     <div class="floating-icon" style="bottom: 10%; right: 10%;"><i class="fas fa-star"></i></div>
-    <div class="floating-icon" style="bottom: 10%; right: 10%;"><i class="fas fa-smile"></i></div>
 
-    <!-- Main Content Area -->
     <main>
         {% block body %}
         <div class="hero-section">
             <div class="container text-center">
                 <h1 class="display-4 mb-4">Welcome to DareSwap!</h1>
-                <p class="lead">Your beautiful login button has been added!</p>
-                <p class="lead">Click the pink gradient login button in the navbar to get started!</p>
+                <p class="lead">Share exciting dares with friends!</p>
+                <p class="lead">Get started by creating or accepting a dare!</p>
             </div>
         </div>
         {% endblock %}
     </main>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2025 Anshika Saraswat. Built with passion and dedication to learning.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('.navbar-custom');
             if (window.scrollY > 50) {
@@ -595,17 +538,6 @@
                 navbar.classList.remove('scrolled');
             }
         });
-        
-        // Placeholder functions
-        function showNotifications() {
-            alert('Notifications feature coming soon!');
-        }
-        
-        function showCreateDareModal() {
-            alert('Create Dare modal coming soon!');
-        }
-        
-       
     </script>
 </body>
 </html>

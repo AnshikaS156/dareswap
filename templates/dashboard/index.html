@@ -1,0 +1,520 @@
+{% extends 'base.html' %}
+{% block body %}
+    <style>
+        .header-section {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #ffeaa7, #fd79a8);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            color: white;
+            padding: 2rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .dare-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .dare-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .dare-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        }
+        
+        .user-greeting {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+        
+        .dare-difficulty {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .difficulty-easy { background: #2ecc71; color: white; }
+        .difficulty-medium { background: #f39c12; color: white; }
+        .difficulty-hard { background: #e74c3c; color: white; }
+        
+        .btn-primary-custom {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            padding: 0.7rem 2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-success-custom {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-success-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-warning-custom {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            border: none;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-warning-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-danger-custom {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border: none;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-danger-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .search-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .search-input {
+            border-radius: 20px;
+            border: 2px solid #e0e0e0;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .category-badge {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .stats-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+        }
+        
+        .form-control-custom {
+            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            padding: 0.8rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control-custom:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .no-dares-message {
+            text-align: center;
+            color: white;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .alert-custom {
+            border-radius: 15px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .time-greeting {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 768px) {
+            .action-buttons {
+                justify-content: center;
+            }
+            
+            .dare-card {
+                margin-bottom: 1rem;
+            }
+            
+            .user-greeting h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+
+    <!-- Header Section -->
+    <section class="header-section">
+        <br><br><br>
+        <div class="container">
+            <!-- User Greeting -->
+            <div class="user-greeting">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h2 class="mb-2">
+                            <i class="fas fa-user-circle me-2"></i>
+                            {% if user.first_name %}
+                                Welcome back, {{ user.first_name }}!
+                            {% else %}
+                                Welcome back, {{ user.username }}!
+                            {% endif %}
+                        </h2>
+                        
+                    </div>
+                    <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                        <span class="badge bg-success fs-6 px-3 py-2">
+                            <i class="fas fa-check-circle me-1"></i>
+                            Active Member
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-tasks text-warning"></i> My Dares Dashboard
+                    </h1>
+                    <p class="lead mb-0">Create, edit, and organize all your dares in one place!</p>
+                </div>
+                <div class="col-lg-4 d-flex justify-content-lg-end gap-2 mt-3 mt-lg-0">
+                    <a href="{% url 'ask_ai' %}" class="btn btn-success-custom btn-lg">
+                        <i class="fas fa-question"></i> Ask AI
+                    </a>
+                    <a href="{% url 'create_dare' %}" class="btn btn-success-custom btn-lg">
+                        <i class="fas fa-plus"></i> Create Dare
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <!-- Success/Error Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-custom alert-dismissible fade show" role="alert">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Stats Container -->
+        <div class="stats-container">
+            <div class="row text-center">
+                <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+                    <div>
+                        <i class="fas fa-list fa-2x mb-2 text-warning"></i>
+                        <h4 class="fw-bold">{{ total_dares }}</h4>
+                        <p class="mb-0">Total Dares</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+                    <div>
+                        <i class="fas fa-fire fa-2x mb-2 text-danger"></i>
+                        <h4 class="fw-bold">{{ hard_dares }}</h4>
+                        <p class="mb-0">Hard Dares</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+                    <div>
+                        <i class="fas fa-star fa-2x mb-2 text-info"></i>
+                        <h4 class="fw-bold">{{ recent_dares }}</h4>
+                        <p class="mb-0">This Week</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div>
+                        <i class="fas fa-tags fa-2x mb-2 text-success"></i>
+                        <h4 class="fw-bold">{{ categories_count }}</h4>
+                        <p class="mb-0">Categories</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="search-container">
+            <form method="GET" action="{% url 'dashboard' %}">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text" style="border-radius: 20px 0 0 20px;">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" class="form-control search-input" name="search" 
+                                   value="{{ request.GET.search }}" 
+                                   placeholder="Search dares by title, description, or category..." 
+                                   style="border-radius: 0 20px 20px 0;">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-control search-input" name="difficulty">
+                            <option value="">All Difficulties</option>
+                            <option value="easy" {% if request.GET.difficulty == 'easy' %}selected{% endif %}>Easy</option>
+                            <option value="medium" {% if request.GET.difficulty == 'medium' %}selected{% endif %}>Medium</option>
+                            <option value="hard" {% if request.GET.difficulty == 'hard' %}selected{% endif %}>Hard</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary-custom w-100">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- Dares Container -->
+         <div id="daresContainer">
+            {% if created_dares or accepted_dares %}
+
+    <!-- 📝 MY CREATED DARES -->
+    <h4 class="mb-3">My Created Dares</h4>
+
+    {% if created_dares %}
+        {% for dare in created_dares %}
+            <div class="dare-card mb-3">
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold text-primary mb-2">
+                        {{ dare.DareTitle }}
+                    </h5>
+
+                    <p class="text-muted mb-2">
+                        {{ dare.Description|truncatewords:30 }}
+                    </p>
+
+                    <span class="badge bg-info">{{ dare.Difficulty }}</span>
+                    <span class="badge bg-secondary">{{ dare.Category }}</span>
+
+                    {% if dare.is_edited %}
+                        <small class="text-muted">(edited)</small>
+                    {% endif %}
+
+                    <div class="mt-3 action-buttons">
+                        <a href="{% url 'edit_dare' dare.id %}"
+                           class="btn btn-sm btn-warning-custom">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+
+                        <a href="{% url 'delete_dare' dare.id %}"
+                           class="btn btn-sm btn-danger-custom"
+                           onclick="return confirm('Delete this dare?');">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">You haven’t created any dares yet.</p>
+    {% endif %}
+
+
+    <!-- ✅ MY ACCEPTED DARES -->
+    <h4 class="mt-5 mb-3">My Accepted Dares</h4>
+
+    {% if accepted_dares %}
+        {% for dare in accepted_dares %}
+            <div class="dare-card mb-3">
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold text-success mb-2">
+                        {{ dare.DareTitle }}
+                    </h5>
+
+                    <p class="text-muted mb-2">
+                        {{ dare.Description|truncatewords:30 }}
+                    </p>
+
+                    <span class="badge bg-success">{{ dare.Difficulty }}</span>
+                    <span class="badge bg-secondary">{{ dare.Category }}</span>
+
+                    <div class="mt-3">
+                        {% if dare.is_completed %}
+                            <span class="badge bg-success">
+                                <i class="fas fa-check"></i> Completed
+                            </span>
+                        {% else %}
+                            <a href="{% url 'complete_dare' dare.id %}"
+                               class="btn btn-sm btn-success"
+                               onclick="return confirm('Mark this dare as completed?');">
+                                <i class="fas fa-flag-checkered"></i> Complete Dare
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">You haven’t accepted any dares yet.</p>
+    {% endif %}
+
+</div>
+
+      
+
+     
+                
+                <!-- Pagination -->
+                {% if is_paginated %}
+                    <nav aria-label="Dares pagination" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}">
+                                        <i class="fas fa-angle-double-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}">
+                                        <i class="fas fa-angle-left"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                                </span>
+                            </li>
+                            
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}">
+                                        <i class="fas fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% else %}
+                <!-- No Dares Message -->
+                <div class="no-dares-message">
+                    <i class="fas fa-inbox fa-5x mb-3 opacity-50"></i>
+                    <h3>No Dares Found</h3>
+                    {% if request.GET.search or request.GET.difficulty %}
+                        <p>No dares match your search criteria. Try adjusting your filters.</p>
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary-custom me-3">
+                            <i class="fas fa-times"></i> Clear Filters
+                        </a>
+                    {% else %}
+                        <p>You haven't created any dares yet. Start your adventure!</p>
+                    {% endif %}
+                    <a href="{% url 'create_dare' %}" class="btn btn-success-custom btn-lg mt-3">
+                        <i class="fas fa-plus"></i> Create Your First Dare
+                        
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
