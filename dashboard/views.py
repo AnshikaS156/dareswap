@@ -148,10 +148,16 @@ def generate_response(query):
 
         url = "https://api.groq.com/openai/v1/chat/completions"
 
+        api_key = settings.GROQ_API_KEY
+
+        if not api_key:
+            raise Exception("GROQ_API_KEY not configured")
+
         headers = {
-            "Authorization": f"Bearer {settings.GROQ_API_KEY}",
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
         }
+
 
         payload = {
             "model": "llama-3.1-8b-instant",

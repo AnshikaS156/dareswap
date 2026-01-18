@@ -266,6 +266,8 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            /* small right margin so auth buttons aren't flush to the viewport edge */
+            margin-right: 0.8rem;
         }
 
         /* Keep navbar items on a single line on large screens and prevent wrapping */
@@ -419,6 +421,8 @@
                 gap: 0.7rem;
                 margin-top: 1rem;
                 width: 100%;
+                /* remove right margin on small screens where actions span full width */
+                margin-right: 0;
             }
             
             .btn-auth {

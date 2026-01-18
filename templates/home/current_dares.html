@@ -474,7 +474,7 @@ Currently Active Dares - DareSwap
 
     {# 🟢 MAIN FEED: Accept #}
     {% if page == "feed" %}
-        <a href="{% url 'accept_dare' dare.id %}"
+        <a href="{% url 'dashboard' %}"
            class="btn btn-success btn-sm"
            onclick="return confirm('Accept this dare?');">
             <i class="fas fa-check-circle"></i> Accept
@@ -509,7 +509,7 @@ Currently Active Dares - DareSwap
     </div>
 </div>
 
-<script>
+<!-- <script>
 // Search functionality
 document.getElementById('searchInput').addEventListener('input', function() {
     const searchTerm = this.value.toLowerCase();
@@ -575,5 +575,5 @@ function filterDares(searchTerm, categoryFilter, difficultyFilter) {
         noDares.closest('.col-12').remove();
     }
 } 
-</script>
+</script> -->
 {% endblock %}
