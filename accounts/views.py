@@ -17,7 +17,7 @@ def register(request):
         password = request.POST.get("password")
         
         # Check if username already exists
-        if Student.objects.filter(username=username).exists():
+        if Student.objects.filter(username=user).exists():
             messages.error(request, "Username already exists. Please choose a different username.")
             return render(request, "accounts/register.html")
         
