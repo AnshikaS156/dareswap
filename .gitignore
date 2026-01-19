@@ -2,14 +2,13 @@
 __pycache__/
 *.pyc
 
-# Environment variables
-.env
+
 
 # OS files
 .DS_Store
 
 # Django
-db.sqlite3
+
 media/
 staticfiles/
 
