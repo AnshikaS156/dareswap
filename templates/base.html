@@ -437,6 +437,12 @@
             body {
                 padding-top: 70px;
             }
+            .logo {
+                height: 40px;
+                width: auto;
+                object-fit: contain;
+            }
+
         }
     </style>
     {% block style %}
@@ -445,10 +451,10 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container-fluid px-0">
-            <a class="navbar-brand navbar-brand-custom" href="/">
-               <img src="{% static 'img/DareSwap.png' %}" alt="DareSwap Logo">
-                DareSwap
+          <a class="navbar-brand navbar-brand-custom" href="/">
+            <img src="{% static 'img/DareSwap.png' %}" alt="DareSwap Logo" class="logo">
             </a>
+
             
             <button class="navbar-toggler navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
